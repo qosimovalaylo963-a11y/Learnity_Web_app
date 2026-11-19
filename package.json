@@ -1,0 +1,21 @@
+{
+  "name": "learnity-ecosystem",
+  "version": "4.0.0",
+  "description": "LEARNITY \u2014 The Lively Teaching Project: Full-Stack Interactive Educational Ecosystem with Role-Based Access, Two-Way Registration, Cryptographic Invitations, Subject Learning Hubs, and Persistent Media Library.",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node start.cjs",
+    "dev": "node start.cjs",
+    "migrate": "node src/db/setup.js migrate",
+    "seed": "node src/db/setup.js seed",
+    "test": "node tests/run_all_tests.js && node tests/hardening.js",
+    "styles": "tailwindcss -c tailwind.config.cjs -i styles/utilities.css -o public/assets/utilities.css"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "tailwindcss": "3.4.17"
+  }
+}

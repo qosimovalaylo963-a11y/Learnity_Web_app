@@ -1,0 +1,2019 @@
+<!doctype html>
+<html lang="en" class="dark scroll-smooth">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="referrer" content="no-referrer" />
+        <meta name="theme-color" content="#101126" />
+        <meta
+            name="description"
+            content="Explore Learnity’s mentor-led subject hubs, hands-on workshops and small learning cohorts in Tashkent and online."
+        />
+        <meta
+            http-equiv="Content-Security-Policy"
+            content="default-src 'none'; script-src 'self'; script-src-attr 'none'; style-src 'self'; style-src-attr 'none'; img-src 'self' https: data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'; worker-src 'none'; require-trusted-types-for 'script'; trusted-types 'none'"
+        />
+        <meta name="learnity-runtime" content="preview" />
+        <title>Learnity · The Lively Teaching Project</title>
+        <link rel="icon" href="assets/mark.svg" type="image/svg+xml" />
+        <link rel="stylesheet" href="assets/utilities.css" />
+        <link rel="stylesheet" href="assets/studio.css" />
+        <script src="assets/vendor/htm.js" defer></script>
+        <script src="assets/vendor/lucide.js" defer></script>
+        <script src="assets/dom.js" defer></script>
+        <script src="assets/forms.js" defer></script>
+        <script src="assets/app.js" defer></script>
+        <script src="assets/motion.js" defer></script>
+        <script src="assets/controls.js" defer></script>
+        <script src="assets/demo.js" defer></script>
+    </head>
+
+    <body class="min-h-screen relative selection:bg-indigo-500 selection:text-white">
+        <a class="skip-link" href="#top">Skip to content</a>
+        <div id="scroll-progress" aria-hidden="true"></div>
+        <canvas id="particle-field" aria-hidden="true"></canvas>
+        <div id="ambient-spotlight" aria-hidden="true"></div>
+        <div id="cursor-aura" aria-hidden="true">
+            <div id="cursor-ring"><span id="cursor-dot"></span></div>
+        </div>
+        <div id="page-wipe" aria-hidden="true"><span></span></div>
+
+        <div class="ambient-background" aria-hidden="true"></div>
+
+        <div
+            id="owner-utility-bar"
+            class="hidden relative z-50 bg-[#090b10]/95 border-b border-amber-500/20 backdrop-blur-md px-4 py-2"
+        >
+            <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3 text-xs">
+                <div class="flex items-center gap-2.5 text-slate-300">
+                    <span
+                        class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 font-semibold"
+                    >
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                        Owner Studio Mode
+                    </span>
+                    <span class="hidden md:inline text-slate-400">
+                        Rasmlarni surib joylashtirishingiz, almashtirishingiz va matnlarni tahrirlashingiz
+                        mumkin.
+                    </span>
+                </div>
+
+                <div class="flex items-center gap-2.5">
+                    <button
+                        id="btn-toggle-edit"
+                        class="px-3 py-1 rounded-md bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 text-slate-300 flex items-center gap-1.5 transition"
+                        data-click="toggle-quick-text-edit"
+                    >
+                        <i data-lucide="pen-line" class="w-3.5 h-3.5 text-amber-400"></i>
+                        <span id="edit-toggle-label">Matnlarni Tahrirlash: O'chiq</span>
+                    </button>
+
+                    <button
+                        class="px-3 py-1 rounded-md bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 text-slate-300 flex items-center gap-1.5 transition"
+                        title="Agar 3D SVG o'rniga o'z PNG logotipingizni yuklamoqchi bo'lsangiz bosing"
+                        data-click="document-logo-file-picker"
+                    >
+                        <i data-lucide="sparkles" class="w-3.5 h-3.5 text-indigo-400"></i>
+                        <span class="hidden sm:inline">Logo PNG Yuklash</span>
+                    </button>
+                    <input
+                        id="logo-file-picker"
+                        type="file"
+                        accept="image/png,image/jpeg,image/webp,image/gif"
+                        class="hidden"
+                        data-change="handle-custom-logo-upload"
+                    />
+
+                    <button
+                        class="px-3 py-1 rounded-md bg-indigo-500/15 hover:bg-indigo-500/25 border border-indigo-500/30 text-indigo-200 flex items-center gap-1.5 transition font-medium"
+                        data-click="toggle-applications-drawer"
+                    >
+                        <i data-lucide="users" class="w-3.5 h-3.5 text-indigo-400"></i>
+                        <span>Applications</span>
+                        <span
+                            id="nav-app-count"
+                            class="px-1.5 py-0.2 rounded bg-indigo-500/30 text-white font-mono text-[11px]"
+                            >3</span
+                        >
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <header class="masthead sticky top-0 z-40">
+            <nav class="site-wrap mast-nav">
+                <a
+                    href="#top"
+                    class="wordmark"
+                    aria-label="Learnity home"
+                    data-click="switch-ecosystem-view-public"
+                >
+                    <div
+                        id="nav-logo-stage"
+                        class="logo-3d-stage relative w-12 h-12 sm:w-13 sm:h-13 flex items-center justify-center"
+                    >
+                        <div
+                            id="nav-logo-card"
+                            class="logo-3d-body w-12 h-12 rounded-full overflow-hidden relative flex items-center justify-center bg-[#1e1b6e]"
+                        >
+                            <svg
+                                class="lively-svg-mark w-full h-full"
+                                viewbox="0 0 120 120"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <defs>
+                                    <lineargradient
+                                        id="navyOuterGrad"
+                                        x1="0"
+                                        y1="0"
+                                        x2="120"
+                                        y2="120"
+                                        gradientunits="userSpaceOnUse"
+                                    >
+                                        <stop offset="0%" stop-color="#191654"></stop>
+                                        <stop offset="55%" stop-color="#241b70"></stop>
+                                        <stop offset="100%" stop-color="#35218a"></stop>
+                                    </lineargradient>
+                                    <lineargradient
+                                        id="ribbonSwooshGrad"
+                                        x1="34"
+                                        y1="56"
+                                        x2="78"
+                                        y2="85"
+                                        gradientunits="userSpaceOnUse"
+                                    >
+                                        <stop offset="0%" stop-color="#ff7847"></stop>
+                                        <stop offset="50%" stop-color="#e03e6d"></stop>
+                                        <stop offset="100%" stop-color="#6b21a8"></stop>
+                                    </lineargradient>
+                                    <lineargradient
+                                        id="warmPagesGrad"
+                                        x1="60"
+                                        y1="82"
+                                        x2="90"
+                                        y2="54"
+                                        gradientunits="userSpaceOnUse"
+                                    >
+                                        <stop offset="0%" stop-color="#ea580c"></stop>
+                                        <stop offset="50%" stop-color="#f97316"></stop>
+                                        <stop offset="100%" stop-color="#fbbf24"></stop>
+                                    </lineargradient>
+                                    <filter
+                                        id="squircleShadow"
+                                        x="14"
+                                        y="16"
+                                        width="92"
+                                        height="92"
+                                        filterunits="userSpaceOnUse"
+                                    >
+                                        <fedropshadow
+                                            dx="0"
+                                            dy="3"
+                                            stddeviation="3"
+                                            flood-color="#090724"
+                                            flood-opacity="0.45"
+                                        ></fedropshadow>
+                                    </filter>
+                                </defs>
+
+                                <circle cx="60" cy="60" r="60" fill="url(#navyOuterGrad)"></circle>
+                                <circle
+                                    cx="60"
+                                    cy="60"
+                                    r="58.5"
+                                    stroke="rgba(255,255,255,0.14)"
+                                    stroke-width="1"
+                                ></circle>
+
+                                <rect
+                                    x="21"
+                                    y="21"
+                                    width="78"
+                                    height="78"
+                                    rx="22"
+                                    fill="#ffffff"
+                                    filter="url(#squircleShadow)"
+                                ></rect>
+
+                                <path
+                                    d="M37 42 C37 33, 44 28, 50 28 L50 74 C50 78, 53 80, 60 80 L76 80 L89 73 L81 88 C79 90, 75 91, 69 91 L49 91 C40 91, 37 84, 37 74 Z"
+                                    fill="#171546"
+                                ></path>
+
+                                <g class="svg-book-pages">
+                                    <path
+                                        d="M60 81 C65 71, 72 60, 83 56 C78 65, 75 73, 74 82 Z"
+                                        fill="url(#warmPagesGrad)"
+                                    ></path>
+                                    <path
+                                        d="M74 82 C77 73, 82 65, 89 62 C85 69, 81 76, 77 82 Z"
+                                        fill="url(#warmPagesGrad)"
+                                        opacity="0.92"
+                                    ></path>
+                                    <path
+                                        d="M77 82 C81 75, 86 70, 92 67 C89 73, 84 78, 80 82 Z"
+                                        fill="url(#warmPagesGrad)"
+                                        opacity="0.82"
+                                    ></path>
+                                </g>
+
+                                <path
+                                    d="M37 56 C39 71, 53 77, 74 84 L55 84 C42 84, 37 77, 37 66 Z"
+                                    fill="url(#ribbonSwooshGrad)"
+                                ></path>
+
+                                <g class="svg-human-figure">
+                                    <circle cx="61.5" cy="52.5" r="4" fill="#171546"></circle>
+                                    <path
+                                        d="M53 77 C53 65, 58 60, 65 57.5 C69 55.5, 72 50, 74.5 44 C73.5 53, 69 61, 63.5 67 C60.5 70, 59 74, 58 78 Z"
+                                        fill="#171546"
+                                    ></path>
+                                </g>
+
+                                <g class="svg-golden-star">
+                                    <path
+                                        d="M73 29 L75.3 34.7 L81 37 L75.3 39.3 L73 45 L70.7 39.3 L65 37 L70.7 34.7 Z"
+                                        fill="#f59e0b"
+                                    ></path>
+                                </g>
+                            </svg>
+                            <img
+                                class="custom-logo-img hidden w-full h-full object-cover rounded-full"
+                                alt="Custom Logo"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col">
+                        <div class="flex items-center gap-2">
+                            <span
+                                contenteditable="false"
+                                class="editable-text font-display text-xl sm:text-2xl font-bold tracking-tight text-white"
+                                data-content-key="static-0"
+                                >Learnity</span
+                            >
+                        </div>
+                        <span
+                            contenteditable="false"
+                            class="editable-text text-[11px] text-slate-400"
+                            data-content-key="static-1"
+                            >The Lively Teaching Project</span
+                        >
+                    </div>
+                </a>
+
+                <div class="desktop-links">
+                    <a
+                        href="#top"
+                        class="text-white hover:text-amber-400 transition"
+                        aria-current="page"
+                        data-click="switch-ecosystem-view-public"
+                        >Home</a
+                    >
+                    <a
+                        href="#about-learnity"
+                        class="hover:text-white transition"
+                        data-click="switch-ecosystem-view-public"
+                        >About</a
+                    >
+                    <a
+                        href="#curriculum-pillars"
+                        class="hover:text-white transition"
+                        data-click="switch-ecosystem-view-public"
+                        >Programs</a
+                    >
+                    <a
+                        href="#subject-hubs-section"
+                        class="hover:text-white transition flex items-center gap-1"
+                        data-click="switch-ecosystem-view-public"
+                    >
+                        <span>Subject Hubs</span>
+                        <span
+                            class="px-1.5 py-0.2 rounded bg-indigo-500/20 text-indigo-300 font-mono text-[10px]"
+                            >8</span
+                        >
+                    </a>
+                    <a
+                        href="#lessons-gallery"
+                        class="hover:text-white transition flex items-center gap-1.5"
+                        data-click="switch-ecosystem-view-public"
+                    >
+                        <span>Gallery</span>
+                        <span class="w-1.5 h-1.5 rounded-full bg-orange-400"></span>
+                    </a>
+                    <a
+                        href="#staff-directory-section"
+                        class="hover:text-white transition"
+                        data-click="switch-ecosystem-view-public"
+                        >Staff</a
+                    >
+                    <a
+                        href="#apply-card"
+                        class="hover:text-white transition"
+                        data-click="switch-ecosystem-view-public-apply"
+                        >Apply</a
+                    >
+                </div>
+
+                <div class="nav-actions">
+                    <button
+                        id="nav-btn-join-code"
+                        class="hidden sm:inline-flex px-3 py-2 rounded-lg bg-indigo-500/15 hover:bg-indigo-500/25 border border-indigo-500/30 text-indigo-200 text-xs font-semibold items-center gap-1.5 transition"
+                        data-click="switch-ecosystem-view-public-invite"
+                    >
+                        <i data-lucide="key-round" class="w-3.5 h-3.5 text-amber-400"></i>
+                        <span>Join with Code</span>
+                    </button>
+                    <button
+                        id="nav-btn-workspace"
+                        class="hidden px-3.5 py-2 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40 text-amber-200 text-xs font-semibold items-center gap-1.5 transition"
+                        data-click="open-active-role-workspace"
+                    >
+                        <i data-lucide="layout-dashboard" class="w-3.5 h-3.5 text-amber-400"></i>
+                        <span id="nav-workspace-label">Dashboard</span>
+                    </button>
+                    <button
+                        id="nav-btn-login"
+                        class="px-3.5 py-2 rounded-lg bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 text-slate-200 text-xs sm:text-sm font-medium flex items-center gap-1.5 transition"
+                        data-click="open-auth-modal-login"
+                    >
+                        <i data-lucide="log-in" class="w-3.5 h-3.5 text-indigo-400"></i>
+                        <span id="nav-login-label">Login</span>
+                    </button>
+                    <a
+                        href="#apply-card"
+                        class="btn btn-primary nav-apply"
+                        data-click="switch-ecosystem-view-public-apply"
+                        >Apply now <i data-lucide="arrow-up-right"></i
+                    ></a>
+                    <button
+                        id="nav-btn-mobile-menu"
+                        class="lg:hidden p-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-slate-200"
+                        aria-label="Toggle Menu"
+                        aria-controls="mobile-nav-drawer"
+                        aria-expanded="false"
+                        data-click="toggle-mobile-nav"
+                    >
+                        <i data-lucide="menu" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </nav>
+        </header>
+
+        <main id="top" class="site-wrap landing" tabindex="-1">
+            <div class="hero-layout">
+                <div class="hero-copy">
+                    <div class="cohort-status">
+                        <span class="pulse-dot" aria-hidden="true"></span
+                        ><span contenteditable="false" class="editable-text" data-content-key="static-2"
+                            >Autumn / Winter cohort</span
+                        >
+                        <span class="cohort-open">Applications open</span>
+                    </div>
+                    <h1 contenteditable="false" class="hero-title editable-text" data-content-key="static-3">
+                        Big ideas.<br /><em>Lively practice.</em>
+                    </h1>
+                    <p
+                        contenteditable="false"
+                        class="hero-description editable-text"
+                        data-content-key="static-4"
+                    >
+                        Small groups, live labs and hands-on projects. Learn alongside students and mentors
+                        turning classroom theory into something you can build.
+                    </p>
+                    <div class="hero-actions">
+                        <a class="btn btn-primary" href="#apply-card" data-click="set-registration-tab-apply"
+                            >Join the next cohort <i data-lucide="arrow-up-right"></i></a
+                        ><a class="btn btn-secondary" href="#lessons-gallery"
+                            ><i data-lucide="images"></i> Explore the gallery</a
+                        >
+                    </div>
+                    <div class="hero-meta">
+                        <span><i data-lucide="map-pin"></i> Tashkent &amp; online</span
+                        ><a href="#about-learnity">About Learnity <i data-lucide="arrow-right"></i></a>
+                    </div>
+                </div>
+                <figure class="fieldnote" aria-label="Workshop photo viewer">
+                    <div class="fieldnote-head">
+                        <span><i data-lucide="aperture"></i> Workshop fieldnotes</span
+                        ><span class="photo-count"
+                            ><b id="feature-index">01</b> / <span id="feature-total">07</span></span
+                        >
+                    </div>
+                    <div class="fieldnote-photo pan-photo-area" data-pointerdown="start-photo-pan-hero">
+                        <img
+                            id="hero-main-photo"
+                            src="assets/photos/1522202176988-66273c2fd55f.webp"
+                            alt="Students gathered around a shared table during a Learnity workshop"
+                            draggable="false"
+                            class="feature-image"
+                            width="1200"
+                            height="800"
+                            fetchpriority="high"
+                        />
+
+                        <div class="photo-brackets" aria-hidden="true"></div>
+                        <div class="photo-caption">
+                            <span id="feature-category">Inside the classroom</span>
+                            <h2 id="feature-title">The collaborative workshop</h2>
+                        </div>
+                        <button
+                            id="btn-hero-replace-photo"
+                            class="owner-only-control hidden feature-replace"
+                            aria-label="Replace featured photo"
+                            data-click="document-hero-photo-input"
+                        >
+                            <i data-lucide="upload" class="w-3.5 h-3.5"></i>
+                            <span>Rasmni almashtirish</span>
+                        </button>
+                        <input
+                            id="hero-photo-input"
+                            type="file"
+                            accept="image/png,image/jpeg,image/webp,image/gif"
+                            class="hidden"
+                            data-change="replace-hero-photo"
+                        />
+                    </div>
+                    <figcaption class="fieldnote-footer">
+                        <span id="feature-subtitle">Tashkent campus · Hybrid cohort</span>
+                        <div class="photo-arrows">
+                            <button type="button" id="feature-prev" aria-label="Previous workshop photo">
+                                <i data-lucide="arrow-left"></i></button
+                            ><button type="button" id="feature-next" aria-label="Next workshop photo">
+                                <i data-lucide="arrow-right"></i>
+                            </button>
+                        </div>
+                    </figcaption>
+                    <div class="frame-tabs" aria-hidden="true"><b></b><b></b><b></b></div>
+                </figure>
+            </div>
+            <div class="subject-strip">
+                <a class="strip-label" href="#subject-hubs-section"
+                    >Subject hubs <i data-lucide="arrow-down-right"></i
+                ></a>
+                <div id="subject-shortcuts" aria-label="Preview a subject hub"></div>
+                <a class="strip-all" href="#subject-hubs-section" aria-label="View all subject hubs"
+                    ><i data-lucide="grid-2x2"></i
+                ></a>
+            </div>
+            <div class="admissions-layout" id="admissions">
+                <div class="admissions-copy">
+                    <div class="eyeline"><span></span> Admissions</div>
+                    <h2>Find your place<br />in the <em>cohort.</em></h2>
+                    <p>
+                        Apply as a learner or mentor, or enter the invitation code you received from the team.
+                    </p>
+                    <div class="admission-detail">
+                        <i data-lucide="users"></i>
+                        <div>
+                            <strong>Small-group learning</strong><span>10–12 peers per workshop group</span>
+                        </div>
+                    </div>
+                    <div class="admission-detail">
+                        <i data-lucide="flask-conical"></i>
+                        <div>
+                            <strong>Hands-on sessions</strong
+                            ><span>Guided labs, debates and weekly builds</span>
+                        </div>
+                    </div>
+                    <div id="hero-logo-stage" class="logo-3d-stage emblem-studio">
+                        <div
+                            id="hero-logo-card"
+                            class="logo-3d-body w-20 h-20 rounded-2xl p-0.5 bg-gradient-to-br from-indigo-500/40 via-purple-500/20 to-orange-500/40 flex items-center justify-center cursor-pointer"
+                            title="Move mouse to tilt 3D Learnity emblem"
+                        >
+                            <svg
+                                class="lively-svg-mark w-full h-full rounded-2xl"
+                                viewbox="0 0 120 120"
+                                fill="none"
+                            >
+                                <circle cx="60" cy="60" r="60" fill="url(#navyOuterGrad)"></circle>
+                                <rect x="21" y="21" width="78" height="78" rx="22" fill="#ffffff"></rect>
+                                <path
+                                    d="M37 42 C37 33, 44 28, 50 28 L50 74 C50 78, 53 80, 60 80 L76 80 L89 73 L81 88 C79 90, 75 91, 69 91 L49 91 C40 91, 37 84, 37 74 Z"
+                                    fill="#171546"
+                                ></path>
+                                <g class="svg-book-pages">
+                                    <path
+                                        d="M60 81 C65 71, 72 60, 83 56 C78 65, 75 73, 74 82 Z"
+                                        fill="url(#warmPagesGrad)"
+                                    ></path>
+                                    <path
+                                        d="M74 82 C77 73, 82 65, 89 62 C85 69, 81 76, 77 82 Z"
+                                        fill="url(#warmPagesGrad)"
+                                        opacity="0.92"
+                                    ></path>
+                                    <path
+                                        d="M77 82 C81 75, 86 70, 92 67 C89 73, 84 78, 80 82 Z"
+                                        fill="url(#warmPagesGrad)"
+                                        opacity="0.82"
+                                    ></path>
+                                </g>
+                                <path
+                                    d="M37 56 C39 71, 53 77, 74 84 L55 84 C42 84, 37 77, 37 66 Z"
+                                    fill="url(#ribbonSwooshGrad)"
+                                ></path>
+                                <g class="svg-human-figure">
+                                    <circle cx="61.5" cy="52.5" r="4" fill="#171546"></circle>
+                                    <path
+                                        d="M53 77 C53 65, 58 60, 65 57.5 C69 55.5, 72 50, 74.5 44 C73.5 53, 69 61, 63.5 67 C60.5 70, 59 74, 58 78 Z"
+                                        fill="#171546"
+                                    ></path>
+                                </g>
+                                <g class="svg-golden-star">
+                                    <path
+                                        d="M73 29 L75.3 34.7 L81 37 L75.3 39.3 L73 45 L70.7 39.3 L65 37 L70.7 34.7 Z"
+                                        fill="#f59e0b"
+                                    ></path>
+                                </g>
+                            </svg>
+                            <img
+                                class="custom-logo-img hidden w-full h-full object-cover rounded-2xl"
+                                alt="Custom Logo"
+                            />
+                        </div>
+                        <span class="text-[10px] font-mono text-slate-500 mt-2"
+                            >Interactive Learnity emblem</span
+                        >
+                    </div>
+                </div>
+                <div class="registration-wrap" id="apply-card">
+                    <div class="registration-surface">
+                        <div class="flex items-center justify-between pb-4 mb-4 border-b border-white/[0.08]">
+                            <div>
+                                <span
+                                    class="text-[11px] font-mono uppercase tracking-wider text-amber-400 block mb-1"
+                                    >Cohort registration</span
+                                >
+                                <h2
+                                    contenteditable="false"
+                                    class="editable-text font-display text-2xl font-bold text-white tracking-tight"
+                                    data-content-key="static-5"
+                                >
+                                    Join the next cohort
+                                </h2>
+                            </div>
+                            <div
+                                class="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/10 flex items-center justify-center text-slate-300"
+                            >
+                                <i data-lucide="graduation-cap" class="w-5 h-5 text-indigo-400"></i>
+                            </div>
+                        </div>
+
+                        <div
+                            class="grid grid-cols-2 gap-2 p-1 rounded-xl bg-[#07090e] border border-white/10 mb-5"
+                            role="tablist"
+                            aria-label="Registration method"
+                        >
+                            <button
+                                type="button"
+                                id="tab-reg-apply"
+                                class="py-2 px-3 rounded-lg text-xs font-semibold transition bg-indigo-600 text-white shadow flex items-center justify-center gap-1.5"
+                                role="tab"
+                                aria-selected="true"
+                                aria-controls="cohort-apply-form"
+                                data-click="set-registration-tab-apply"
+                            >
+                                <i data-lucide="file-text" class="w-3.5 h-3.5"></i>
+                                <span>Apply to join</span>
+                            </button>
+                            <button
+                                type="button"
+                                id="tab-reg-invite"
+                                class="py-2 px-3 rounded-lg text-xs font-semibold transition text-slate-400 hover:text-white flex items-center justify-center gap-1.5"
+                                role="tab"
+                                aria-selected="false"
+                                aria-controls="invite-register-form"
+                                data-click="set-registration-tab-invite"
+                            >
+                                <i data-lucide="key-round" class="w-3.5 h-3.5 text-amber-400"></i>
+                                <span>Use an invitation</span>
+                            </button>
+                        </div>
+
+                        <form
+                            id="cohort-apply-form"
+                            class="space-y-3.5"
+                            role="tabpanel"
+                            aria-labelledby="tab-reg-apply"
+                            data-submit="submit-cohort-application"
+                        >
+                            <div>
+                                <label class="block text-xs font-medium text-slate-300 mb-1.5"
+                                    >Application Category</label
+                                >
+                                <div class="grid grid-cols-2 gap-2.5">
+                                    <label class="cursor-pointer">
+                                        <input
+                                            type="radio"
+                                            name="requested_role"
+                                            value="MEMBER"
+                                            checked
+                                            class="peer hidden"
+                                            data-change="update-role-application-hint"
+                                        />
+                                        <div
+                                            class="px-3 py-2 rounded-xl bg-[#07090e] border border-white/10 peer-checked:border-indigo-500 peer-checked:bg-indigo-500/15 text-xs text-slate-300 peer-checked:text-white font-semibold text-center transition"
+                                        >
+                                            Become a Member
+                                        </div>
+                                    </label>
+                                    <label class="cursor-pointer">
+                                        <input
+                                            type="radio"
+                                            name="requested_role"
+                                            value="STAFF"
+                                            class="peer hidden"
+                                            data-change="update-role-application-hint"
+                                        />
+                                        <div
+                                            class="px-3 py-2 rounded-xl bg-[#07090e] border border-white/10 peer-checked:border-amber-500 peer-checked:bg-amber-500/15 text-xs text-slate-300 peer-checked:text-white font-semibold text-center transition"
+                                        >
+                                            Apply as Staff / Mentor
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-slate-300 mb-1.5"
+                                    >Full Name</label
+                                >
+                                <input
+                                    id="input-fullname"
+                                    type="text"
+                                    required
+                                    placeholder="e.g. Javohir Tursunov"
+                                    class="w-full px-3.5 py-2.5 rounded-xl bg-[#07090e] border border-white/10 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition"
+                                />
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-medium text-slate-300 mb-1.5"
+                                    >Phone Number or @Telegram</label
+                                >
+                                <input
+                                    id="input-phone"
+                                    type="text"
+                                    required
+                                    placeholder="+998 90 123 45 67"
+                                    class="w-full px-3.5 py-2.5 rounded-xl bg-[#07090e] border border-white/10 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition"
+                                />
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-medium text-slate-300 mb-1.5"
+                                    >Select Teaching / Learning Track</label
+                                >
+                                <div class="relative">
+                                    <select
+                                        id="input-track"
+                                        required
+                                        class="w-full appearance-none px-3.5 py-2.5 rounded-xl bg-[#07090e] border border-white/10 text-sm text-white focus:outline-none focus:border-indigo-500 transition"
+                                    >
+                                        <option value="" disabled selected>
+                                            Choose primary subject track...
+                                        </option>
+                                        <option value="Computer Science">Computer Science</option>
+                                        <option value="Biology">Biology</option>
+                                        <option value="Chemistry">Chemistry</option>
+                                        <option value="Mathematics">Mathematics</option>
+                                        <option value="Economics">Economics</option>
+                                        <option value="Business">Business</option>
+                                        <option value="Global Politics">Global Politics</option>
+                                        <option value="Physics">Physics</option>
+                                    </select>
+                                    <i
+                                        data-lucide="chevron-down"
+                                        class="w-4 h-4 text-slate-400 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none"
+                                    ></i>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-medium text-slate-300 mb-1.5"
+                                    >Preferred Session Format</label
+                                >
+                                <div class="grid grid-cols-2 gap-2.5">
+                                    <label class="cursor-pointer">
+                                        <input
+                                            type="radio"
+                                            name="schedule"
+                                            value="Weekday Evenings"
+                                            checked
+                                            class="peer hidden"
+                                        />
+                                        <div
+                                            class="px-3 py-2 rounded-xl bg-[#07090e] border border-white/10 peer-checked:border-indigo-500 peer-checked:bg-indigo-500/10 text-xs text-slate-300 peer-checked:text-white font-medium text-center transition"
+                                        >
+                                            Weekday Intensive
+                                        </div>
+                                    </label>
+                                    <label class="cursor-pointer">
+                                        <input
+                                            type="radio"
+                                            name="schedule"
+                                            value="Weekend Labs"
+                                            class="peer hidden"
+                                        />
+                                        <div
+                                            class="px-3 py-2 rounded-xl bg-[#07090e] border border-white/10 peer-checked:border-indigo-500 peer-checked:bg-indigo-500/10 text-xs text-slate-300 peer-checked:text-white font-medium text-center transition"
+                                        >
+                                            Weekend Labs
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-medium text-slate-300 mb-1.5"
+                                    >Email Address</label
+                                >
+                                <input
+                                    id="input-email"
+                                    type="email"
+                                    required
+                                    placeholder="you@university.edu"
+                                    class="w-full px-3.5 py-2.5 rounded-xl bg-[#07090e] border border-white/10 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition"
+                                />
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-medium text-slate-300 mb-1.5"
+                                    >Interested Subjects (Select one or more)</label
+                                >
+                                <div
+                                    id="apply-subjects-pills"
+                                    class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-[11px]"
+                                >
+                                    <label class="cursor-pointer"
+                                        ><input
+                                            type="checkbox"
+                                            name="apply_subject"
+                                            value="Computer Science"
+                                            checked
+                                            class="peer hidden"
+                                        /><span
+                                            class="block px-2 py-1.5 rounded-lg bg-[#07090e] border border-white/10 peer-checked:border-orange-400 peer-checked:bg-orange-500/15 peer-checked:text-white text-slate-400 text-center transition truncate"
+                                            >Computer Science</span
+                                        ></label
+                                    >
+                                    <label class="cursor-pointer"
+                                        ><input
+                                            type="checkbox"
+                                            name="apply_subject"
+                                            value="Biology"
+                                            class="peer hidden"
+                                        /><span
+                                            class="block px-2 py-1.5 rounded-lg bg-[#07090e] border border-white/10 peer-checked:border-emerald-400 peer-checked:bg-emerald-500/15 peer-checked:text-white text-slate-400 text-center transition truncate"
+                                            >Biology</span
+                                        ></label
+                                    >
+                                    <label class="cursor-pointer"
+                                        ><input
+                                            type="checkbox"
+                                            name="apply_subject"
+                                            value="Chemistry"
+                                            class="peer hidden"
+                                        /><span
+                                            class="block px-2 py-1.5 rounded-lg bg-[#07090e] border border-white/10 peer-checked:border-amber-400 peer-checked:bg-amber-500/15 peer-checked:text-white text-slate-400 text-center transition truncate"
+                                            >Chemistry</span
+                                        ></label
+                                    >
+                                    <label class="cursor-pointer"
+                                        ><input
+                                            type="checkbox"
+                                            name="apply_subject"
+                                            value="Mathematics"
+                                            class="peer hidden"
+                                        /><span
+                                            class="block px-2 py-1.5 rounded-lg bg-[#07090e] border border-white/10 peer-checked:border-pink-400 peer-checked:bg-pink-500/15 peer-checked:text-white text-slate-400 text-center transition truncate"
+                                            >Mathematics</span
+                                        ></label
+                                    >
+                                    <label class="cursor-pointer"
+                                        ><input
+                                            type="checkbox"
+                                            name="apply_subject"
+                                            value="Economics"
+                                            class="peer hidden"
+                                        /><span
+                                            class="block px-2 py-1.5 rounded-lg bg-[#07090e] border border-white/10 peer-checked:border-sky-400 peer-checked:bg-sky-500/15 peer-checked:text-white text-slate-400 text-center transition truncate"
+                                            >Economics</span
+                                        ></label
+                                    >
+                                    <label class="cursor-pointer"
+                                        ><input
+                                            type="checkbox"
+                                            name="apply_subject"
+                                            value="Business"
+                                            class="peer hidden"
+                                        /><span
+                                            class="block px-2 py-1.5 rounded-lg bg-[#07090e] border border-white/10 peer-checked:border-purple-400 peer-checked:bg-purple-500/15 peer-checked:text-white text-slate-400 text-center transition truncate"
+                                            >Business</span
+                                        ></label
+                                    >
+                                    <label class="cursor-pointer"
+                                        ><input
+                                            type="checkbox"
+                                            name="apply_subject"
+                                            value="Global Politics"
+                                            class="peer hidden"
+                                        /><span
+                                            class="block px-2 py-1.5 rounded-lg bg-[#07090e] border border-white/10 peer-checked:border-teal-400 peer-checked:bg-teal-500/15 peer-checked:text-white text-slate-400 text-center transition truncate"
+                                            >Global Politics</span
+                                        ></label
+                                    >
+                                    <label class="cursor-pointer"
+                                        ><input
+                                            type="checkbox"
+                                            name="apply_subject"
+                                            value="Physics"
+                                            class="peer hidden"
+                                        /><span
+                                            class="block px-2 py-1.5 rounded-lg bg-[#07090e] border border-white/10 peer-checked:border-indigo-400 peer-checked:bg-indigo-500/15 peer-checked:text-white text-slate-400 text-center transition truncate"
+                                            >Physics</span
+                                        ></label
+                                    >
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-medium text-slate-300 mb-1.5"
+                                    >Educational Background</label
+                                >
+                                <input
+                                    id="input-background"
+                                    type="text"
+                                    required
+                                    placeholder="e.g. 2nd-year BSc Student / High School Senior / MSc Researcher"
+                                    class="w-full px-3.5 py-2 rounded-xl bg-[#07090e] border border-white/10 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition"
+                                />
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-medium text-slate-300 mb-1.5"
+                                    >Short Motivation Statement</label
+                                >
+                                <textarea
+                                    id="input-motivation"
+                                    rows="2"
+                                    required
+                                    placeholder="What would you like to build, learn, or teach in Learnity?"
+                                    class="w-full px-3.5 py-2 rounded-xl bg-[#07090e] border border-white/10 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition"
+                                ></textarea>
+                            </div>
+
+                            <div class="pt-1">
+                                <button
+                                    type="submit"
+                                    class="w-full py-3 rounded-xl bg-gradient-to-r from-indigo-600 via-indigo-500 to-orange-500 hover:from-indigo-500 hover:to-orange-400 text-white font-semibold text-sm shadow-lg shadow-indigo-950/60 transition flex items-center justify-center gap-2"
+                                >
+                                    <span>Submit Application</span>
+                                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+
+                            <div
+                                id="application-feedback-banner"
+                                class="hidden rounded-xl border p-3 text-xs space-y-1"
+                            ></div>
+
+                            <p class="text-[11px] text-slate-500 text-center pt-0.5">
+                                Applications are reviewed directly by Learnity academic coordinators.
+                            </p>
+                        </form>
+
+                        <form
+                            id="invite-register-form"
+                            class="hidden space-y-4"
+                            role="tabpanel"
+                            aria-labelledby="tab-reg-invite"
+                            data-submit="submit-invitation-registration"
+                        >
+                            <div
+                                class="p-3.5 rounded-xl bg-indigo-500/10 border border-indigo-500/25 space-y-1"
+                            >
+                                <div class="text-xs font-semibold text-indigo-200 flex items-center gap-1.5">
+                                    <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-400"></i>
+                                    <span>Already have an invitation? Join Learnity.</span>
+                                </div>
+                                <p class="text-[11px] text-slate-400 leading-relaxed">
+                                    Enter your personal cryptographic invitation code to unlock your assigned
+                                    subjects and permissions immediately.
+                                </p>
+                                <div
+                                    class="pt-1 flex items-center justify-between text-[11px] text-amber-300/90 font-mono"
+                                    data-demo-only=""
+                                >
+                                    <span
+                                        >Demo starter code:
+                                        <button
+                                            class="underline cursor-pointer"
+                                            type="button"
+                                            data-click="fill-demo-invite-code"
+                                        >
+                                            LRN-STEM-2026-JOIN
+                                        </button></span
+                                    >
+                                    <button
+                                        type="button"
+                                        class="px-2 py-0.5 rounded bg-indigo-500/30 hover:bg-indigo-500/40 text-white text-[10px] font-sans font-semibold"
+                                        data-click="verify-entered-invite-code"
+                                    >
+                                        Verify Code
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-medium text-slate-300 mb-1.5"
+                                    >Invitation Code</label
+                                >
+                                <div class="flex gap-2">
+                                    <input
+                                        id="invite-reg-code"
+                                        type="text"
+                                        required
+                                        placeholder="LRN-XXXX-XXXX-XXXX"
+                                        class="flex-1 px-3.5 py-2.5 rounded-xl bg-[#07090e] border border-white/10 font-mono uppercase text-sm text-amber-300 placeholder-slate-600 focus:outline-none focus:border-amber-400 transition"
+                                    />
+                                    <button
+                                        type="button"
+                                        class="px-3.5 py-2.5 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 text-xs font-semibold text-white transition"
+                                        data-click="verify-entered-invite-code"
+                                    >
+                                        Check
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div
+                                id="invite-verified-preview"
+                                class="hidden rounded-xl bg-emerald-500/10 border border-emerald-500/30 p-3.5 space-y-2 text-xs"
+                            ></div>
+
+                            <div>
+                                <label class="block text-xs font-medium text-slate-300 mb-1.5"
+                                    >Your Full Name</label
+                                >
+                                <input
+                                    id="invite-reg-name"
+                                    type="text"
+                                    required
+                                    placeholder="e.g. Sardorbek Karimov"
+                                    class="w-full px-3.5 py-2.5 rounded-xl bg-[#07090e] border border-white/10 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition"
+                                />
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-medium text-slate-300 mb-1.5"
+                                    >Email Address</label
+                                >
+                                <input
+                                    id="invite-reg-email"
+                                    type="email"
+                                    required
+                                    placeholder="you@learnity.org"
+                                    class="w-full px-3.5 py-2.5 rounded-xl bg-[#07090e] border border-white/10 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition"
+                                />
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-medium text-slate-300 mb-1.5"
+                                    >Create Account Password (min 6 chars)</label
+                                >
+                                <input
+                                    id="invite-reg-password"
+                                    type="password"
+                                    required
+                                    minlength="8"
+                                    placeholder="••••••••"
+                                    class="w-full px-3.5 py-2.5 rounded-xl bg-[#07090e] border border-white/10 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition"
+                                />
+                            </div>
+
+                            <button
+                                type="submit"
+                                class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 via-orange-500 to-indigo-600 hover:from-amber-400 hover:to-indigo-500 text-white font-semibold text-sm shadow-lg transition flex items-center justify-center gap-2"
+                            >
+                                <i data-lucide="unlock" class="w-4 h-4"></i>
+                                <span>Unlock Assigned Access &amp; Create Account</span>
+                            </button>
+
+                            <div id="invite-reg-feedback" class="hidden rounded-xl border p-3 text-xs"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <div class="kinetic-marquee" aria-label="Learn, build, discover, teach, repeat" aria-hidden="true">
+            <div class="kinetic-marquee-track" aria-hidden="true">
+                <span>LEARN WITH PURPOSE</span><b>✳</b><span>BUILD WITH CURIOSITY</span><b>✳</b
+                ><span>DISCOVER WHAT'S NEXT</span><b>✳</b><span>TEACH WHAT YOU KNOW</span><b>✳</b
+                ><span>MAKE IDEAS REAL</span><b>✳</b> <span>LEARN WITH PURPOSE</span><b>✳</b
+                ><span>BUILD WITH CURIOSITY</span><b>✳</b><span>DISCOVER WHAT'S NEXT</span><b>✳</b
+                ><span>TEACH WHAT YOU KNOW</span><b>✳</b><span>MAKE IDEAS REAL</span><b>✳</b>
+            </div>
+        </div>
+
+        <section id="about-learnity" class="relative z-10 border-t border-white/[0.07] bg-[#080a0f]/70 py-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-8 space-y-14">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                    <div class="lg:col-span-5 space-y-3">
+                        <div
+                            class="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-amber-400"
+                        >
+                            <span>// 01. About Learnity</span>
+                        </div>
+                        <h2
+                            contenteditable="false"
+                            class="editable-text font-display text-3xl sm:text-4xl font-bold text-white tracking-editorial leading-tight"
+                            data-content-key="static-6"
+                        >
+                            Built to Make Classroom Learning Active, Collaborative &amp; Memorable.
+                        </h2>
+                    </div>
+
+                    <div class="lg:col-span-7 space-y-4 text-slate-300 text-sm sm:text-base leading-relaxed">
+                        <p contenteditable="false" class="editable-text" data-content-key="static-7">
+                            <strong class="text-white font-semibold"
+                                >Learnity (The Lively Teaching Project)</strong
+                            >
+                            was founded by educators, engineers, and senior university mentors with a single
+                            goal: to transform traditional one-way lessons into high-energy, workshop-style
+                            learning environments.
+                        </p>
+                        <p
+                            contenteditable="false"
+                            class="editable-text text-slate-400"
+                            data-content-key="static-8"
+                        >
+                            Instead of memorizing static slides, students in Learnity cohorts work in small
+                            teams of 10–12 peers. Every module combines foundational theory with live
+                            demonstrations, structured debates, and weekly hands-on builds—ensuring every
+                            participant leaves with real competence and a documented portfolio.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                    <div class="surface-card rounded-2xl p-5 sm:p-6">
+                        <div
+                            contenteditable="false"
+                            class="editable-text font-display text-3xl sm:text-4xl font-bold text-white tracking-tight"
+                            data-content-key="static-9"
+                        >
+                            60+
+                        </div>
+                        <div
+                            contenteditable="false"
+                            class="editable-text text-xs sm:text-sm text-slate-400 mt-1"
+                            data-content-key="static-10"
+                        >
+                            Cohort Students Trained
+                        </div>
+                    </div>
+                    <div class="surface-card rounded-2xl p-5 sm:p-6">
+                        <div
+                            contenteditable="false"
+                            class="editable-text font-display text-3xl sm:text-4xl font-bold text-amber-400 tracking-tight"
+                            data-content-key="static-11"
+                        >
+                            8
+                        </div>
+                        <div
+                            contenteditable="false"
+                            class="editable-text text-xs sm:text-sm text-slate-400 mt-1"
+                            data-content-key="static-12"
+                        >
+                            Core Academic Subjects
+                        </div>
+                    </div>
+                    <div class="surface-card rounded-2xl p-5 sm:p-6">
+                        <div
+                            contenteditable="false"
+                            class="editable-text font-display text-3xl sm:text-4xl font-bold text-indigo-400 tracking-tight"
+                            data-content-key="static-13"
+                        >
+                            5.0
+                        </div>
+                        <div
+                            contenteditable="false"
+                            class="editable-text text-xs sm:text-sm text-slate-400 mt-1"
+                            data-content-key="static-14"
+                        >
+                            Student Feedback Rating
+                        </div>
+                    </div>
+                    <a
+                        href="#staff-directory-section"
+                        class="surface-card rounded-2xl p-5 sm:p-6 block group"
+                    >
+                        <div
+                            id="metric-staff-count"
+                            contenteditable="false"
+                            class="editable-text font-display text-3xl sm:text-4xl font-bold text-emerald-400 tracking-tight"
+                            data-content-key="static-15"
+                        >
+                            8+
+                        </div>
+                        <div
+                            contenteditable="false"
+                            class="editable-text text-xs sm:text-sm text-slate-400 mt-1 flex items-center gap-1"
+                            data-content-key="static-16"
+                        >
+                            <span>Dedicated Staff &amp; Mentors</span>
+                            <i
+                                data-lucide="arrow-up-right"
+                                class="w-3.5 h-3.5 text-slate-500 group-hover:text-white transition"
+                            ></i>
+                        </div>
+                    </a>
+                </div>
+
+                <div id="curriculum-pillars" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="surface-card rounded-2xl p-6 space-y-3">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-indigo-500/15 border border-indigo-500/30 flex items-center justify-center text-indigo-400"
+                        >
+                            <i data-lucide="cpu" class="w-5 h-5"></i>
+                        </div>
+                        <h3
+                            contenteditable="false"
+                            class="editable-text font-display text-lg font-bold text-white"
+                            data-content-key="static-17"
+                        >
+                            1. Practice-First Curriculum
+                        </h3>
+                        <p
+                            contenteditable="false"
+                            class="editable-text text-sm text-slate-400 leading-relaxed"
+                            data-content-key="static-18"
+                        >
+                            70% of classroom time is dedicated to practical exercises, live experiments, and
+                            collaborative problem-solving rather than passive note-taking.
+                        </p>
+                    </div>
+
+                    <div class="surface-card rounded-2xl p-6 space-y-3">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400"
+                        >
+                            <i data-lucide="users-round" class="w-5 h-5"></i>
+                        </div>
+                        <h3
+                            contenteditable="false"
+                            class="editable-text font-display text-lg font-bold text-white"
+                            data-content-key="static-19"
+                        >
+                            2. Small-Group Lively Labs
+                        </h3>
+                        <p
+                            contenteditable="false"
+                            class="editable-text text-sm text-slate-400 leading-relaxed"
+                            data-content-key="static-20"
+                        >
+                            Intimate cohorts where every student receives direct code reviews, design
+                            critiques, and personalized mentorship from experienced instructors.
+                        </p>
+                    </div>
+
+                    <div class="surface-card rounded-2xl p-6 space-y-3">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400"
+                        >
+                            <i data-lucide="folder-git-2" class="w-5 h-5"></i>
+                        </div>
+                        <h3
+                            contenteditable="false"
+                            class="editable-text font-display text-lg font-bold text-white"
+                            data-content-key="static-21"
+                        >
+                            3. Real Demo Day &amp; Portfolio
+                        </h3>
+                        <p
+                            contenteditable="false"
+                            class="editable-text text-sm text-slate-400 leading-relaxed"
+                            data-content-key="static-22"
+                        >
+                            Every 8-week track concludes with an open Demo Day where students present their
+                            finished prototypes, research, or teaching modules.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section
+            id="lessons-gallery"
+            class="relative z-10 max-w-7xl mx-auto px-4 sm:px-8 py-20 border-t border-white/[0.07]"
+        >
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+                <div class="space-y-2">
+                    <div
+                        class="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-indigo-400"
+                    >
+                        <span>// 02. Pics from the Lessons</span>
+                    </div>
+                    <h2
+                        contenteditable="false"
+                        class="editable-text font-display text-3xl sm:text-4xl font-bold text-white tracking-editorial"
+                        data-content-key="static-23"
+                    >
+                        Inside Our Live Classrooms &amp; Workshops
+                    </h2>
+                    <p class="text-sm text-slate-400">
+                        Highlights from our collaborative laboratory sessions, code clinics, and academic
+                        seminars.
+                    </p>
+                </div>
+
+                <div id="owner-add-photo-wrap" class="owner-only-control hidden items-center gap-3 shrink-0">
+                    <button
+                        class="px-4 py-2.5 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 text-xs sm:text-sm font-semibold text-white flex items-center gap-2 transition"
+                        data-click="add-new-lesson-photo-card"
+                    >
+                        <i data-lucide="plus" class="w-4 h-4 text-amber-400"></i>
+                        <span>Yangi Dars Rasmi Qo'shish</span>
+                    </button>
+                </div>
+            </div>
+
+            <div
+                id="lesson-cards-grid"
+                class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7"
+            ></div>
+        </section>
+
+        <section
+            id="subject-hubs-section"
+            class="relative z-10 max-w-7xl mx-auto px-4 sm:px-8 py-20 border-t border-white/[0.07]"
+        >
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+                <div class="space-y-2">
+                    <div
+                        class="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-emerald-400"
+                    >
+                        <span>// 03. Subject-Specific Learning Hubs</span>
+                    </div>
+                    <h2 class="font-display text-3xl sm:text-4xl font-bold text-white tracking-editorial">
+                        Dedicated Interactive Hubs for Every Discipline
+                    </h2>
+                    <p class="text-sm text-slate-400 max-w-2xl">
+                        Every subject has its own protected learning hub (<code
+                            class="text-indigo-300 font-mono text-xs"
+                            >/subjects/biology</code
+                        >, <code class="text-indigo-300 font-mono text-xs">/subjects/mathematics</code>, etc.)
+                        featuring video lessons, laboratory protocols, uploaded PDFs, presentations, and
+                        moderated member contributions.
+                    </p>
+                </div>
+                <div class="flex items-center gap-2.5 shrink-0">
+                    <span
+                        id="subject-access-indicator"
+                        class="px-3 py-1.5 rounded-xl bg-white/[0.04] border border-white/10 text-xs text-slate-300"
+                    >
+                        Sign in or use an invitation code to unlock assigned subject hubs
+                    </span>
+                </div>
+            </div>
+
+            <div id="public-subjects-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                <div class="loading-card" aria-hidden="true"><b></b><span></span><span></span></div>
+                <div class="loading-card" aria-hidden="true"><b></b><span></span><span></span></div>
+                <div class="loading-card" aria-hidden="true"><b></b><span></span><span></span></div>
+            </div>
+        </section>
+
+        <section
+            id="learning-opportunities"
+            class="relative z-10 border-t border-white/[0.07] bg-[#080a0f]/75 py-20"
+        >
+            <div class="max-w-7xl mx-auto px-4 sm:px-8 space-y-12">
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                    <div class="space-y-2">
+                        <div
+                            class="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-amber-400"
+                        >
+                            <span>// 04. Learning Opportunities &amp; Interactive Journey</span>
+                        </div>
+                        <h2 class="font-display text-3xl sm:text-4xl font-bold text-white tracking-editorial">
+                            How a Learnity Cohort Transforms Learners into Builders
+                        </h2>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <button
+                            type="button"
+                            data-timeline-btn="0"
+                            class="px-3.5 py-1.5 rounded-xl text-xs font-semibold border border-white/10 bg-white/5 text-white ecosystem-pill-active transition"
+                            data-click="select-timeline-stage"
+                        >
+                            01 · Discovery &amp; Invite
+                        </button>
+                        <button
+                            type="button"
+                            data-timeline-btn="1"
+                            class="px-3.5 py-1.5 rounded-xl text-xs font-semibold border border-white/10 bg-white/5 text-slate-300 hover:text-white transition"
+                            data-click="select-timeline-stage-23"
+                        >
+                            02 · Live Workshop Labs
+                        </button>
+                        <button
+                            type="button"
+                            data-timeline-btn="2"
+                            class="px-3.5 py-1.5 rounded-xl text-xs font-semibold border border-white/10 bg-white/5 text-slate-300 hover:text-white transition"
+                            data-click="select-timeline-stage-24"
+                        >
+                            03 · Peer Mentorship
+                        </button>
+                        <button
+                            type="button"
+                            data-timeline-btn="3"
+                            class="px-3.5 py-1.5 rounded-xl text-xs font-semibold border border-white/10 bg-white/5 text-slate-300 hover:text-white transition"
+                            data-click="select-timeline-stage-25"
+                        >
+                            04 · Capstone Demo Day
+                        </button>
+                    </div>
+                </div>
+
+                <div
+                    id="interactive-timeline-detail"
+                    class="surface-card rounded-2xl p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center"
+                ></div>
+            </div>
+        </section>
+
+        <section
+            id="staff-directory-section"
+            class="relative z-10 max-w-7xl mx-auto px-4 sm:px-8 py-20 border-t border-white/[0.07]"
+        >
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+                <div class="space-y-2">
+                    <div
+                        class="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-indigo-400"
+                    >
+                        <span>// 05. Academic Staff &amp; Mentors</span>
+                    </div>
+                    <h2 class="font-display text-3xl sm:text-4xl font-bold text-white tracking-editorial">
+                        Guided by Researchers, Engineers &amp; Debate Coaches
+                    </h2>
+                    <p class="text-sm text-slate-400 max-w-2xl">
+                        Every Learnity track is led by subject specialists with granular workspace permissions
+                        to publish laboratory guides, annotated problem sets, and video clinics.
+                    </p>
+                </div>
+                <button
+                    id="btn-owner-manage-staff"
+                    class="hidden px-4 py-2.5 rounded-xl bg-indigo-500/15 hover:bg-indigo-500/25 border border-indigo-500/30 text-xs font-semibold text-indigo-200 items-center gap-2 transition"
+                    data-click="open-owner-section-staff"
+                >
+                    <i data-lucide="user-cog" class="w-4 h-4"></i>
+                    <span>Manage Staff Directory</span>
+                </button>
+            </div>
+
+            <div id="public-staff-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="loading-card" aria-hidden="true"><b></b><span></span><span></span></div>
+                <div class="loading-card" aria-hidden="true"><b></b><span></span><span></span></div>
+                <div class="loading-card" aria-hidden="true"><b></b><span></span><span></span></div>
+            </div>
+        </section>
+
+        <section
+            id="view-subject-hub"
+            class="hidden relative z-20 max-w-7xl mx-auto px-4 sm:px-8 py-10 space-y-8"
+        >
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <button
+                    class="px-3.5 py-2 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 text-xs font-semibold text-slate-200 flex items-center gap-2 transition"
+                    data-click="switch-ecosystem-view-public"
+                >
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                    <span>Back to Learnity Overview</span>
+                </button>
+                <div
+                    id="subject-hub-route-pill"
+                    class="px-3 py-1 rounded-full bg-indigo-500/15 border border-indigo-500/30 font-mono text-xs text-indigo-300"
+                >
+                    /subjects/biology
+                </div>
+            </div>
+
+            <div id="subject-hub-header" class="surface-card rounded-2xl p-6 sm:p-8"></div>
+
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <div class="flex flex-wrap items-center gap-2" id="subject-hub-type-filters">
+                    <button
+                        data-res-filter="all"
+                        class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-indigo-600 text-white transition"
+                        data-click="filter-subject-resources-all"
+                    >
+                        All Materials
+                    </button>
+                    <button
+                        data-res-filter="pdf"
+                        class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white/5 text-slate-300 hover:text-white transition"
+                        data-click="filter-subject-resources-pdf"
+                    >
+                        PDFs &amp; Docs
+                    </button>
+                    <button
+                        data-res-filter="presentation"
+                        class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white/5 text-slate-300 hover:text-white transition"
+                        data-click="filter-subject-resources-presentation"
+                    >
+                        Presentations
+                    </button>
+                    <button
+                        data-res-filter="youtube"
+                        class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white/5 text-slate-300 hover:text-white transition"
+                        data-click="filter-subject-resources-youtube"
+                    >
+                        Video Lessons
+                    </button>
+                    <button
+                        data-res-filter="link"
+                        class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white/5 text-slate-300 hover:text-white transition"
+                        data-click="filter-subject-resources-link"
+                    >
+                        Useful Links
+                    </button>
+                    <button
+                        data-res-filter="study_guide"
+                        class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white/5 text-slate-300 hover:text-white transition"
+                        data-click="filter-subject-resources"
+                    >
+                        Study Guides
+                    </button>
+                </div>
+                <button
+                    id="btn-subject-contribute"
+                    class="hidden px-4 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-orange-500 hover:from-indigo-500 hover:to-orange-400 text-white text-xs font-semibold items-center gap-2 shadow-lg transition"
+                    data-click="open-resource-modal"
+                >
+                    <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                    <span>Add Learning Material</span>
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div class="lg:col-span-8 space-y-4" id="subject-hub-resources-list"></div>
+                <div class="lg:col-span-4 space-y-6">
+                    <div class="surface-card rounded-2xl p-5 space-y-4">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-display text-base font-bold text-white flex items-center gap-2">
+                                <i data-lucide="megaphone" class="w-4 h-4 text-amber-400"></i>
+                                <span>Subject Announcements</span>
+                            </h3>
+                        </div>
+                        <div id="subject-hub-announcements" class="space-y-3"></div>
+                    </div>
+                    <div class="surface-card rounded-2xl p-5 space-y-3">
+                        <h3 class="font-display text-base font-bold text-white flex items-center gap-2">
+                            <i data-lucide="shield-check" class="w-4 h-4 text-emerald-400"></i>
+                            <span>Your Subject Permissions</span>
+                        </h3>
+                        <div
+                            id="subject-hub-permissions-badges"
+                            class="flex flex-wrap gap-1.5 text-[11px]"
+                        ></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section
+            id="view-owner-dashboard"
+            class="hidden relative z-20 max-w-7xl mx-auto px-4 sm:px-8 py-10 space-y-8"
+        >
+            <div
+                class="surface-card rounded-2xl p-6 sm:p-8 flex flex-col lg:flex-row lg:items-center justify-between gap-6 border-amber-500/30"
+            >
+                <div class="space-y-1.5">
+                    <div
+                        class="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full badge-role-owner text-[11px] font-mono uppercase"
+                    >
+                        <i data-lucide="crown" class="w-3.5 h-3.5"></i>
+                        <span>Owner Administration Console</span>
+                    </div>
+                    <h1 class="font-display text-2xl sm:text-3xl font-bold text-white">
+                        Learnity Platform Command Center
+                    </h1>
+                    <p class="text-xs sm:text-sm text-slate-400">
+                        Full administrative control over applications, cryptographic invitation codes,
+                        granular subject permissions, staff profiles, and the persistent media library.
+                    </p>
+                </div>
+                <div class="flex flex-wrap items-center gap-2.5">
+                    <button
+                        class="px-3.5 py-2 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 text-xs font-semibold text-slate-200 flex items-center gap-1.5"
+                        data-click="switch-ecosystem-view-public"
+                    >
+                        <i data-lucide="globe" class="w-3.5 h-3.5 text-indigo-400"></i>
+                        <span>Public Website</span>
+                    </button>
+                    <button
+                        class="px-3.5 py-2 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 text-xs font-semibold text-emerald-200 flex items-center gap-1.5"
+                        data-click="trigger-database-backup"
+                    >
+                        <i data-lucide="database-backup" class="w-3.5 h-3.5 text-emerald-400"></i>
+                        <span>Backup SQLite DB</span>
+                    </button>
+                    <button
+                        class="px-3.5 py-2 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-xs font-semibold text-rose-200 flex items-center gap-1.5"
+                        data-click="logout-session"
+                    >
+                        <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
+                        <span>Sign Out</span>
+                    </button>
+                </div>
+            </div>
+
+            <div
+                class="flex flex-wrap gap-2 p-1.5 rounded-2xl bg-[#090b10] border border-white/10"
+                id="owner-nav-tabs"
+            >
+                <button
+                    data-owner-tab="overview"
+                    class="px-3.5 py-2 rounded-xl text-xs font-semibold ecosystem-pill-active text-slate-300 transition"
+                    data-click="open-owner-section-overview"
+                >
+                    Overview &amp; Charts
+                </button>
+                <button
+                    data-owner-tab="applications"
+                    class="px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white transition"
+                    data-click="open-owner-section-applications"
+                >
+                    Applications
+                </button>
+                <button
+                    data-owner-tab="invitations"
+                    class="px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white transition"
+                    data-click="open-owner-section-invitations"
+                >
+                    Invitation Generator
+                </button>
+                <button
+                    data-owner-tab="members"
+                    class="px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white transition"
+                    data-click="open-owner-section-members"
+                >
+                    Members &amp; Permissions
+                </button>
+                <button
+                    data-owner-tab="staff"
+                    class="px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white transition"
+                    data-click="open-owner-section-staff"
+                >
+                    Staff Management
+                </button>
+                <button
+                    data-owner-tab="subjects"
+                    class="px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white transition"
+                    data-click="open-owner-section-subjects"
+                >
+                    Subjects
+                </button>
+                <button
+                    data-owner-tab="resources"
+                    class="px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white transition"
+                    data-click="open-owner-section-resources"
+                >
+                    Content Moderation
+                </button>
+                <button
+                    data-owner-tab="media"
+                    class="px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white transition"
+                    data-click="open-owner-section-media"
+                >
+                    Media Library
+                </button>
+                <button
+                    data-owner-tab="announcements"
+                    class="px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white transition"
+                    data-click="open-owner-section-announcements"
+                >
+                    Announcements
+                </button>
+                <button
+                    data-owner-tab="settings"
+                    class="px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white transition"
+                    data-click="open-owner-section-settings"
+                >
+                    Email &amp; Settings
+                </button>
+                <button
+                    data-owner-tab="logs"
+                    class="px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white transition"
+                    data-click="open-owner-section-logs"
+                >
+                    Activity Logs
+                </button>
+            </div>
+
+            <div id="owner-section-container" class="space-y-6"></div>
+        </section>
+
+        <section
+            id="view-staff-workspace"
+            class="hidden relative z-20 max-w-7xl mx-auto px-4 sm:px-8 py-10 space-y-8"
+        >
+            <div
+                class="surface-card rounded-2xl p-6 sm:p-8 flex flex-col lg:flex-row lg:items-center justify-between gap-6"
+            >
+                <div class="space-y-1.5">
+                    <div
+                        class="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full badge-role-staff text-[11px] font-mono uppercase"
+                    >
+                        <i data-lucide="briefcase" class="w-3.5 h-3.5"></i>
+                        <span>Staff Instructional Workspace</span>
+                    </div>
+                    <h1
+                        id="staff-workspace-title"
+                        class="font-display text-2xl sm:text-3xl font-bold text-white"
+                    >
+                        Staff Workspace
+                    </h1>
+                    <p class="text-xs sm:text-sm text-slate-400">
+                        Publish learning materials, upload PDFs and presentations, add YouTube clinics, and
+                        manage your assigned subjects.
+                    </p>
+                </div>
+                <div class="flex flex-wrap items-center gap-2.5">
+                    <button
+                        class="px-3.5 py-2 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 text-xs font-semibold text-slate-200"
+                        data-click="switch-ecosystem-view-public"
+                    >
+                        Public Website
+                    </button>
+                    <button
+                        class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-xs font-semibold text-white flex items-center gap-1.5"
+                        data-click="open-resource-modal"
+                    >
+                        <i data-lucide="upload-cloud" class="w-3.5 h-3.5"></i>
+                        <span>Publish Material</span>
+                    </button>
+                    <button
+                        class="px-3.5 py-2 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-xs font-semibold text-rose-200"
+                        data-click="logout-session"
+                    >
+                        Sign Out
+                    </button>
+                </div>
+            </div>
+            <div id="staff-workspace-body" class="space-y-8"></div>
+        </section>
+
+        <section
+            id="view-member-portal"
+            class="hidden relative z-20 max-w-7xl mx-auto px-4 sm:px-8 py-10 space-y-8"
+        >
+            <div
+                class="surface-card rounded-2xl p-6 sm:p-8 flex flex-col lg:flex-row lg:items-center justify-between gap-6"
+            >
+                <div class="space-y-1.5">
+                    <div
+                        class="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full badge-role-member text-[11px] font-mono uppercase"
+                    >
+                        <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                        <span>Learnity Member Portal</span>
+                    </div>
+                    <h1
+                        id="member-portal-welcome"
+                        class="font-display text-2xl sm:text-3xl font-bold text-white"
+                    >
+                        Welcome back
+                    </h1>
+                    <p class="text-xs sm:text-sm text-slate-400">
+                        Access your permitted Subject Learning Hubs, study materials, video clinics,
+                        announcements, and profile settings.
+                    </p>
+                </div>
+                <div class="flex flex-wrap items-center gap-2.5">
+                    <button
+                        class="px-3.5 py-2 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 text-xs font-semibold text-slate-200"
+                        data-click="switch-ecosystem-view-public"
+                    >
+                        Public Website
+                    </button>
+                    <button
+                        class="px-3.5 py-2 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-xs font-semibold text-rose-200"
+                        data-click="logout-session"
+                    >
+                        Sign Out
+                    </button>
+                </div>
+            </div>
+            <div id="member-portal-body" class="space-y-8"></div>
+        </section>
+
+        <footer class="relative z-10 border-t border-white/[0.07] bg-[#050609] py-12 text-xs text-slate-500">
+            <div
+                class="max-w-7xl mx-auto px-4 sm:px-8 grid grid-cols-1 md:grid-cols-4 gap-8 pb-8 border-b border-white/[0.06]"
+            >
+                <div class="space-y-2 md:col-span-2">
+                    <div class="flex items-center gap-2.5">
+                        <span class="font-display font-bold text-white text-base">Learnity</span>
+                        <span
+                            class="px-2 py-0.5 rounded bg-indigo-500/15 border border-indigo-500/30 text-indigo-300 font-mono text-[10px]"
+                            >THE LIVELY TEACHING PROJECT</span
+                        >
+                    </div>
+                    <p class="text-slate-400 max-w-md leading-relaxed">
+                        An interactive educational ecosystem combining small-group laboratory workshops, peer
+                        mentorship, and granular subject hubs.
+                    </p>
+                </div>
+                <div class="space-y-2">
+                    <div class="font-semibold text-slate-200 uppercase font-mono text-[11px]">Navigation</div>
+                    <ul class="space-y-1.5 text-slate-400">
+                        <li>
+                            <a href="#top" class="hover:text-white" data-click="switch-ecosystem-view-public"
+                                >Home &amp; Overview</a
+                            >
+                        </li>
+                        <li>
+                            <a
+                                href="#about-learnity"
+                                class="hover:text-white"
+                                data-click="switch-ecosystem-view-public"
+                                >About Learnity</a
+                            >
+                        </li>
+                        <li>
+                            <a
+                                href="#subject-hubs-section"
+                                class="hover:text-white"
+                                data-click="switch-ecosystem-view-public"
+                                >Subject Learning Hubs</a
+                            >
+                        </li>
+                        <li>
+                            <a
+                                href="#lessons-gallery"
+                                class="hover:text-white"
+                                data-click="switch-ecosystem-view-public"
+                                >Pics from Lessons</a
+                            >
+                        </li>
+                        <li>
+                            <a
+                                href="#staff-directory-section"
+                                class="hover:text-white"
+                                data-click="switch-ecosystem-view-public"
+                                >Staff Directory</a
+                            >
+                        </li>
+                    </ul>
+                </div>
+                <div class="space-y-2">
+                    <div class="font-semibold text-slate-200 uppercase font-mono text-[11px]">
+                        Portals &amp; Access
+                    </div>
+                    <ul class="space-y-1.5 text-slate-400">
+                        <li>
+                            <button
+                                class="hover:text-white"
+                                data-click="switch-ecosystem-view-public-apply-46"
+                            >
+                                Apply as Member or Staff
+                            </button>
+                        </li>
+                        <li>
+                            <button class="hover:text-white" data-click="switch-ecosystem-view-public-invite">
+                                Join with Invitation Code
+                            </button>
+                        </li>
+                        <li>
+                            <button class="hover:text-white" data-click="open-auth-modal-login">
+                                Owner / Staff / Member Login
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div
+                class="max-w-7xl mx-auto px-4 sm:px-8 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4"
+            >
+                <div>
+                    © 2026 Learnity — The Lively Teaching Project. All original artwork &amp; classroom
+                    photography preserved.
+                </div>
+                <div class="text-slate-400 font-mono text-[11px]">
+                    Interactive Teaching &amp; Mentorship Ecosystem
+                </div>
+            </div>
+        </footer>
+
+        <div
+            id="applications-drawer"
+            class="fixed inset-0 z-50 hidden"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Applications and sign-in"
+            tabindex="-1"
+        >
+            <div
+                class="absolute inset-0 bg-black/75 backdrop-blur-sm"
+                data-click="toggle-applications-drawer-47"
+            ></div>
+            <div
+                class="drawer-panel absolute right-0 top-0 bottom-0 w-full max-w-md bg-[#0c0e14] border-l border-white/10 p-6 flex flex-col shadow-2xl"
+            >
+                <div class="flex items-center justify-between pb-4 border-b border-white/10">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="users" class="w-5 h-5 text-indigo-400"></i>
+                        <h3 class="font-display text-lg font-bold text-white">
+                            Applications &amp; Admin Access
+                        </h3>
+                    </div>
+                    <button
+                        class="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white"
+                        aria-label="Close applications"
+                        data-click="toggle-applications-drawer-47"
+                    >
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                    </button>
+                </div>
+
+                <div
+                    id="admin-login-panel"
+                    class="login-panel mt-5 rounded-2xl border border-indigo-400/20 p-5 space-y-3"
+                >
+                    <div class="flex items-center gap-2 text-white font-semibold">
+                        <i data-lucide="shield-check" class="w-4 h-4 text-indigo-300"></i>
+                        <span>Sign In to Learnity</span>
+                    </div>
+                    <p class="text-xs leading-relaxed text-slate-400">
+                        Sign in with your Owner, Staff, or Member account credentials.
+                    </p>
+                    <form id="admin-login-form" class="space-y-3">
+                        <input
+                            id="admin-email"
+                            type="email"
+                            autocomplete="username"
+                            placeholder="Email (leave blank for default Owner)"
+                            class="w-full px-3.5 py-2.5 rounded-xl bg-[#07090e] border border-white/10 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition"
+                        />
+                        <input
+                            id="admin-password"
+                            type="password"
+                            autocomplete="current-password"
+                            required
+                            placeholder="Password"
+                            class="w-full px-3.5 py-2.5 rounded-xl bg-[#07090e] border border-white/10 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition"
+                        />
+                        <button
+                            id="admin-login-button"
+                            type="submit"
+                            class="interactive-button w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold"
+                        >
+                            Sign in
+                        </button>
+                        <p id="admin-login-error" class="hidden text-xs text-rose-300"></p>
+                    </form>
+                </div>
+
+                <div id="admin-content-panel" class="hidden flex-1 min-h-0 flex flex-col">
+                    <div class="flex items-center justify-between gap-2 py-3">
+                        <p class="text-xs text-slate-400">
+                            Authenticated Session ·
+                            <button
+                                class="text-amber-300 underline font-semibold"
+                                data-click="open-active-role-workspace-48"
+                            >
+                                Open Full Workspace
+                            </button>
+                        </p>
+                        <div class="flex items-center gap-2 shrink-0">
+                            <button
+                                class="text-xs text-indigo-300 hover:text-white"
+                                data-click="load-applications"
+                            >
+                                Refresh
+                            </button>
+                            <button class="text-xs text-slate-400 hover:text-white" data-click="admin-logout">
+                                Log out
+                            </button>
+                        </div>
+                    </div>
+                    <div id="drawer-applications-list" class="flex-1 overflow-y-auto space-y-3 pr-1"></div>
+                </div>
+            </div>
+        </div>
+
+        <div
+            id="ecosystem-modal"
+            class="fixed inset-0 z-50 hidden flex items-center justify-center p-4"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Learnity workspace dialog"
+            tabindex="-1"
+        >
+            <div
+                class="absolute inset-0 bg-black/80 backdrop-blur-md"
+                data-click="close-ecosystem-modal"
+            ></div>
+            <div
+                id="ecosystem-modal-body"
+                class="modal-backdrop-enter relative z-10 w-full max-w-lg glass-panel rounded-2xl p-6 sm:p-8 max-h-[90vh] overflow-y-auto"
+            ></div>
+        </div>
+
+        <div
+            id="mobile-nav-drawer"
+            class="fixed inset-0 z-50 hidden lg:hidden"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Navigation"
+            tabindex="-1"
+        >
+            <div
+                class="absolute inset-0 bg-black/75 backdrop-blur-sm"
+                data-click="toggle-mobile-nav-52"
+            ></div>
+            <div
+                class="drawer-panel absolute right-0 top-0 bottom-0 w-72 bg-[#0c0e14] border-l border-white/10 p-6 flex flex-col justify-between"
+            >
+                <div class="space-y-6">
+                    <div class="flex items-center justify-between pb-4 border-b border-white/10">
+                        <span class="font-display font-bold text-white text-lg">Learnity Navigation</span>
+                        <button
+                            class="p-1.5 rounded-lg bg-white/5 text-slate-400 hover:text-white"
+                            data-click="toggle-mobile-nav-52"
+                        >
+                            <i data-lucide="x" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                    <div class="flex flex-col gap-3 text-sm font-medium text-slate-300">
+                        <a
+                            href="#top"
+                            class="py-1.5 hover:text-white"
+                            data-click="switch-ecosystem-view-public-53"
+                            >Home</a
+                        >
+                        <a
+                            href="#about-learnity"
+                            class="py-1.5 hover:text-white"
+                            data-click="switch-ecosystem-view-public-53"
+                            >About Learnity</a
+                        >
+                        <a
+                            href="#curriculum-pillars"
+                            class="py-1.5 hover:text-white"
+                            data-click="switch-ecosystem-view-public-53"
+                            >Programs</a
+                        >
+                        <a
+                            href="#subject-hubs-section"
+                            class="py-1.5 hover:text-white"
+                            data-click="switch-ecosystem-view-public-53"
+                            >Subject Hubs</a
+                        >
+                        <a
+                            href="#lessons-gallery"
+                            class="py-1.5 hover:text-white"
+                            data-click="switch-ecosystem-view-public-53"
+                            >Lessons Gallery</a
+                        >
+                        <a
+                            href="#staff-directory-section"
+                            class="py-1.5 hover:text-white"
+                            data-click="switch-ecosystem-view-public-53"
+                            >Staff Directory</a
+                        >
+                        <a
+                            href="#apply-card"
+                            class="py-1.5 text-amber-400 font-semibold"
+                            data-click="switch-ecosystem-view-public-apply-54"
+                            >Apply to Join</a
+                        >
+                        <a
+                            href="#apply-card"
+                            class="py-1.5 text-indigo-300 font-semibold"
+                            data-click="switch-ecosystem-view-public-invite-55"
+                            >Join with Invitation Code</a
+                        >
+                    </div>
+                </div>
+                <button
+                    class="w-full py-2.5 rounded-xl bg-indigo-600 text-white text-xs font-semibold"
+                    data-click="toggle-mobile-nav-login"
+                >
+                    Sign In / Portal
+                </button>
+            </div>
+        </div>
+
+        <div
+            id="toast-stack"
+            class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"
+            aria-live="polite"
+            aria-relevant="additions"
+        ></div>
+    </body>
+</html>

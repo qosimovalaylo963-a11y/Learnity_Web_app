@@ -1,0 +1,24 @@
+# Environment & Secrets (NEVER commit credentials)
+.env
+.env.local
+.env.*.local
+
+# Persistent SQLite Databases & Private Uploads
+data/*.sqlite
+data/*.sqlite-shm
+data/*.sqlite-wal
+data/uploads/*
+!data/uploads/.gitkeep
+data/backups/*
+!data/backups/.gitkeep
+
+# Dependencies & OS Artifacts
+node_modules/
+.DS_Store
+Thumbs.db
+npm-debug.log*
+
+# Legacy JSON database and interrupted snapshots
+data/*.json
+data/*.pending
+data/test_run_*/
